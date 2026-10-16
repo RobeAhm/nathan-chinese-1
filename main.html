@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nathan's Chinese Adventure 💕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 50%, #f48fb1 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 25px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(233,30,99,0.15);
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #c2185b;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #888;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #fff0f6, #fce4ec);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(233,30,99,0.1);
+            border: 2px solid #f48fb1;
+        }
+
+        .close-banner {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: #c2185b;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .close-banner:hover {
+            background: rgba(194,24,91,0.1);
+        }
+
+        .welcome-banner h3 {
+            font-size: 20px;
+            color: #c2185b;
+            margin-bottom: 12px;
+        }
+
+        .welcome-banner p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        .welcome-banner p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Calendar */
+        .calendar-section {
+            background: rgba(255,255,255,0.92);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(233,30,99,0.08);
+        }
+
+        .calendar-section h2 {
+            font-size: 20px;
+            color: #c2185b;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        .day-card {
+            background: white;
+            border-radius: 14px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: default;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .day-card.available {
+            border-color: #f48fb1;
+            cursor: pointer;
+            background: linear-gradient(135deg, #fff0f6, #fff);
+        }
+
+        .day-card.available:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(233,30,99,0.2);
+        }
+
+        .day-card.completed {
+            border-color: #4caf50;
+            background: linear-gradient(135deg, #e8f5e9, #fff);
+        }
+
+        .day-card.locked {
+            opacity: 0.5;
+            background: #f5f5f5;
+        }
+
+        .day-number {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .day-status {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .day-card.completed .day-status {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .day-card.available .day-status {
+            color: #c2185b;
+        }
+
+        /* Content Area */
+        .content-area {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(233,30,99,0.08);
+            margin-bottom: 80px;
+        }
+
+        .day-title {
+            font-size: 26px;
+            color: #c2185b;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        /* Vocab List */
+        .vocab-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .vocab-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 18px;
+            background: linear-gradient(135deg, #fce4ec, #fff);
+            border-radius: 14px;
+            border-left: 4px solid #ec407a;
+            transition: transform 0.2s;
+        }
+
+        .vocab-item:hover {
+            transform: translateX(5px);
+        }
+
+        .vocab-idx {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ec407a;
+            min-width: 28px;
+            height: 28px;
+            background: rgba(236,64,122,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vocab-info {
+            flex: 1;
+        }
+
+        .vocab-chinese {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .vocab-pinyin {
+            font-size: 14px;
+            color: #888;
+            font-style: italic;
+            margin-bottom: 3px;
+        }
+
+        .vocab-meaning {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .vocab-example {
+            font-size: 13px;
+            color: #999;
+            background: rgba(0,0,0,0.03);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 5px;
+        }
+
+        /* Next Day Button */
+        .next-day-btn {
+            display: block;
+            margin: 25px auto 0;
+            background: linear-gradient(135deg, #ec407a, #c2185b);
+            color: white;
+            border: none;
+            padding: 14px 45px;
+            border-radius: 30px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .next-day-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(233,30,99,0.3);
+        }
+
+        /* Quiz Button */
+        .start-quiz-btn {
+            display: none;
+            margin: 25px auto 0;
+            background: linear-gradient(135deg, #ab47bc, #7b1fa2);
+            color: white;
+            border: none;
+            padding: 14px 45px;
+            border-radius: 30px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .start-quiz-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(171,71,188,0.3);
+        }
+
+        /* Quiz Area */
+        .quiz-area {
+            display: none;
+            margin-top: 25px;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quiz-progress {
+            flex: 1;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+
+        .quiz-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ec407a, #c2185b);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .quiz-progress-text {
+            font-size: 14px;
+            color: #888;
+            white-space: nowrap;
+        }
+
+        .question-text {
+            font-size: 18px;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option-btn {
+            padding: 14px 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            text-align: left;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: #ec407a;
+            background: #fce4ec;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        /* Result Area */
+        .result-area {
+            display: none;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .score-main {
+            font-size: 52px;
+            font-weight: 700;
+            color: #c2185b;
+            margin-bottom: 5px;
+        }
+
+        .score-percentage {
+            font-size: 18px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .reward-display {
+            padding: 25px;
+            border-radius: 16px;
+            margin-top: 15px;
+        }
+
+        .reward-display.perfect {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border: 2px solid #ffd54f;
+        }
+
+        .reward-display.great {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border: 2px solid #81c784;
+        }
+
+        .reward-display.good {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 2px solid #64b5f6;
+        }
+
+        .reward-display.fail {
+            background: linear-gradient(135deg, #fbe9e7, #ffccbc);
+            border: 2px solid #ef9a9a;
+        }
+
+        .reward-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        .reward-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .retry-btn {
+            margin-top: 20px;
+            background: #888;
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .retry-btn:hover {
+            background: #666;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #c2185b;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 0; }
+            .header h1 { font-size: 22px; }
+            .calendar-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
+            .day-card { padding: 12px 8px; }
+            .content-area { padding: 20px; }
+            .vocab-chinese { font-size: 19px; }
+        }
+
+        @media (max-width: 480px) {
+            .calendar-grid { grid-template-columns: repeat(3, 1fr); }
+            .day-number { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>Nathan's Chinese Adventure 🇨🇳💕</h1>
+        <p>30 days to impress your girlfriend • Made with love by Robe</p>
+    </div>
+
+    <!-- Welcome Banner -->
+    <div class="welcome-banner" id="welcomeBanner">
+        <button class="close-banner" onclick="closeWelcomeBanner()">✕</button>
+        <h3>Hey Baby! 👋</h3>
+        <p>Welcome to your <strong>30-day Chinese learning adventure!</strong> Every day you get <strong>10 new words</strong> (easy, medium, hard). Study them, then take the <strong>10-question quiz</strong>.</p>
+        <p><strong>Days 1-10</strong> are free to explore — just click "Next Day" whenever you're ready! From <strong>Day 11</strong>, you'll need to pass the quiz (≥8/10) to unlock the next day.</p>
+        <p style="color:#c2185b;font-weight:600;">No peeking ahead! One day at a time, my love. Now study! 😘</p>
+    </div>
+
+    <!-- Calendar Section -->
+    <div class="calendar-section">
+        <h2>📅 Your Learning Journey</h2>
+        <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area" id="contentArea">
+        <div class="day-title" id="dayTitle">Select a day to begin</div>
+        
+        <div class="vocab-list" id="vocabList"></div>
+
+        <!-- Next Day Button (Days 1-10 only) -->
+        <button class="next-day-btn" id="nextDayBtn" style="display:none;" onclick="goToNextDay()">
+            Next Day → 💕
+        </button>
+
+        <!-- Start Quiz Button -->
+        <button class="start-quiz-btn" id="startQuizBtn" onclick="startQuiz(currentDay)">
+            📝 Start Quiz!
+        </button>
+
+        <!-- Quiz Area -->
+        <div class="quiz-area" id="quizArea">
+            <div class="quiz-header">
+                <div class="quiz-progress">
+                    <div class="quiz-progress-bar" id="progressBar" style="width:0%"></div>
+                </div>
+                <span class="quiz-progress-text" id="progressText">Question 1 of 10</span>
+            </div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options" id="options"></div>
+        </div>
+
+        <!-- Result Area -->
+        <div class="result-area" id="resultArea">
+            <div class="score-main" id="scoreDisplay">0/10</div>
+            <div class="score-percentage" id="percentageDisplay">0%</div>
+            <div id="rewardContent"></div>
+            <button class="retry-btn" onclick="startQuiz(currentDay)">🔄 Try Again</button>
+        </div>
+    </div>
+
+    <div class="footer">Made with 💕 for Nathan • Love you baby!</div>
+</div><script>
+// ===== WORD DATA =====
+const wordData = {};
+
+// Days 1-15 (Basic HSK 1-2)
+for (let d = 1; d <= 15; d++) {
+    wordData[d] = [];
+    const basics = [
+        { chinese: '你好', pinyin: 'nǐ hǎo', meaning: 'Hello', example: '你好，我叫Nathan。' },
+        { chinese: '谢谢', pinyin: 'xiè xiè', meaning: 'Thank you', example: '谢谢你的礼物。' },
+        { chinese: '爱', pinyin: 'ài', meaning: 'Love', example: '我爱你。' },
+        { chinese: '我', pinyin: 'wǒ', meaning: 'I / Me', example: '我是Nathan。' },
+        { chinese: '你', pinyin: 'nǐ', meaning: 'You', example: '你很漂亮。' },
+        { chinese: '好', pinyin: 'hǎo', meaning: 'Good', example: '今天天气很好。' },
+        { chinese: '不', pinyin: 'bù', meaning: 'No / Not', example: '我不知道。' },
+        { chinese: '是', pinyin: 'shì', meaning: 'To be', example: '她是我的女朋友。' },
+        { chinese: '很', pinyin: 'hěn', meaning: 'Very', example: '我很开心。' },
+        { chinese: '的', pinyin: 'de', meaning: '(possessive particle)', example: '这是你的书。' }
+    ];
+    let shuffled = [...basics].sort(() => Math.random() - 0.5);
+    shuffled.forEach(w => wordData[d].push({...w}));
+}
+
+// Days 16-30 (HSK 2-3 intermediate)
+const advancedWords = [
+    { chinese: '因为', pinyin: 'yīn wèi', meaning: 'Because', example: '因为我爱你。' },
+    { chinese: '所以', pinyin: 'suǒ yǐ', meaning: 'So / Therefore', example: '所以我来找你。' },
+    { chinese: '但是', pinyin: 'dàn shì', meaning: 'But', example: '我想去，但是没有时间。' },
+    { chinese: '虽然', pinyin: 'suī rán', meaning: 'Although', example: '虽然很难，但我坚持。' },
+    { chinese: '如果', pinyin: 'rú guǒ', meaning: 'If', example: '如果你来，我会很开心。' },
+    { chinese: '可以', pinyin: 'kě yǐ', meaning: 'Can / May', example: '我可以进来吗？' },
+    { chinese: '应该', pinyin: 'yīng gāi', meaning: 'Should', example: '你应该努力学习。' },
+    { chinese: '知道', pinyin: 'zhī dào', meaning: 'Know', example: '我知道这个字。' },
+    { chinese: '觉得', pinyin: 'jué de', meaning: 'Feel / Think', example: '我觉得中文很难。' },
+    { chinese: '喜欢', pinyin: 'xǐ huān', meaning: 'Like', example: '我喜欢你。' },
+    { chinese: '高兴', pinyin: 'gāo xìng', meaning: 'Happy', example: '我很高兴认识你。' },
+    { chinese: '漂亮', pinyin: 'piào liang', meaning: 'Beautiful', example: '你很漂亮。' },
+    { chinese: '聪明', pinyin: 'cōng míng', meaning: 'Smart', example: '你真的很聪明。' },
+    { chinese: '努力', pinyin: 'nǔ lì', meaning: 'Hardworking', example: '你要努力学中文。' },
+    { chinese: '考试', pinyin: 'kǎo shì', meaning: 'Exam', example: '明天有中文考试。' },
+    { chinese: '准备', pinyin: 'zhǔn bèi', meaning: 'Prepare', example: '我在准备考试。' },
+    { chinese: '已经', pinyin: 'yǐ jīng', meaning: 'Already', example: '我已经吃过了。' },
+    { chinese: '正在', pinyin: 'zhèng zài', meaning: 'In progress', example: '我正在学习。' },
+    { chinese: '一起', pinyin: 'yī qǐ', meaning: 'Together', example: '我们一起吃饭吧。' },
+    { chinese: '告诉', pinyin: 'gào su', meaning: 'Tell', example: '请告诉我你的名字。' },
+    { chinese: '帮助', pinyin: 'bāng zhù', meaning: 'Help', example: '谢谢你帮助我。' },
+    { chinese: '希望', pinyin: 'xī wàng', meaning: 'Hope', example: '我希望你能来。' },
+    { chinese: '相信', pinyin: 'xiāng xìn', meaning: 'Believe', example: '我相信你可以。' },
+    { chinese: '记得', pinyin: 'jì dé', meaning: 'Remember', example: '我记得那一天。' },
+    { chinese: '忘记', pinyin: 'wàng jì', meaning: 'Forget', example: '不要忘记我。' },
+    { chinese: '经常', pinyin: 'jīng cháng', meaning: 'Often', example: '我经常想你。' },
+    { chinese: '突然', pinyin: 'tū rán', meaning: 'Suddenly', example: '他突然出现了。' },
+    { chinese: '一直', pinyin: 'yī zhí', meaning: 'Always', example: '我一直在这里等你。' },
+    { chinese: '最后', pinyin: 'zuì hòu', meaning: 'Finally / Last', example: '最后我们在一起了。' },
+    { chinese: '幸福', pinyin: 'xìng fú', meaning: 'Happiness', example: '和你在一起很幸福。' }
+];
+
+for (let d = 16; d <= 30; d++) {
+    wordData[d] = [];
+    let shuffled = [...advancedWords].sort(() => Math.random() - 0.5);
+    let used = new Set();
+    let count = 0;
+    for (let w of shuffled) {
+        if (!used.has(w.chinese) && count < 10) {
+            used.add(w.chinese);
+            wordData[d].push({...w});
+            count++;
+        }
+    }
+}
+
+// ===== STATE =====
+let unlockedDays = [1];
+let currentDay = 1;
+let currentQuestions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+
+// ===== INIT =====
+loadProgress();
+updateCalendar();
+
+// ===== WELCOME BANNER =====
+function closeWelcomeBanner() {
+    document.getElementById('welcomeBanner').style.display = 'none';
+}
+
+// ===== DAY NAVIGATION =====
+function isDayUnlocked(day) {
+    if (day <= 10) return true;
+    if (day === 11) return unlockedDays.includes(10);
+    return unlockedDays.includes(day - 1);
+}
+
+function goToNextDay() {
+    let nextDay = currentDay + 1;
+    if (nextDay <= 10) {
+        showDayContent(nextDay);
+    } else {
+        document.getElementById('nextDayBtn').style.display = 'none';
+    }
+}
+
+// ===== CALENDAR =====
+function updateCalendar() {
+    const grid = document.getElementById('calendarGrid');
+    grid.innerHTML = '';
+    
+    for (let i = 1; i <= 30; i++) {
+        const card = document.createElement('div');
+        card.className = 'day-card';
+        
+        const unlocked = unlockedDays.includes(i);
+        const accessible = isDayUnlocked(i);
+        
+        if (i <= 10) {
+            card.classList.add('available');
+            card.innerHTML = `
+                <div class="day-number">Day ${i}</div>
+                <div class="day-status">📖 Open</div>
+            `;
+            card.onclick = () => showDayContent(i);
+        } else if (unlocked) {
+            card.classList.add('completed');
+            card.innerHTML = `
+                <div class="day-number">Day ${i}</div>
+                <div class="day-status">✅ Done!</div>
+            `;
+            card.onclick = () => showDayContent(i);
+        } else if (accessible) {
+            card.classList.add('available');
+            card.innerHTML = `
+                <div class="day-number">Day ${i}</div>
+                <div class="day-status">📖 Ready</div>
+            `;
+            card.onclick = () => showDayContent(i);
+        } else {
+            card.classList.add('locked');
+            card.innerHTML = `
+                <div class="day-number">Day ${i}</div>
+                <div class="day-status">🔒 Locked</div>
+            `;
+        }
+        
+        grid.appendChild(card);
+    }
+}
+
+// ===== SHOW DAY CONTENT =====
+function showDayContent(day) {
+    currentDay = day;
+    const words = wordData[day];
+    
+    document.getElementById('dayTitle').textContent = `Day ${day}`;
+    
+    const vocabDiv = document.getElementById('vocabList');
+    vocabDiv.innerHTML = '';
+    
+    words.forEach((word, idx) => {
+        const item = document.createElement('div');
+        item.className = 'vocab-item';
+        item.innerHTML = `
+            <span class="vocab-idx">${idx + 1}</span>
+            <div class="vocab-info">
+                <div class="vocab-chinese">${word.chinese}</div>
+                <div class="vocab-pinyin">${word.pinyin}</div>
+                <div class="vocab-meaning">${word.meaning}</div>
+                <div class="vocab-example">${word.example}</div>
+            </div>
+        `;
+        vocabDiv.appendChild(item);
+    });
+    
+    if (day < 10) {
+        document.getElementById('nextDayBtn').style.display = 'block';
+    } else {
+        document.getElementById('nextDayBtn').style.display = 'none';
+    }
+    
+    document.getElementById('startQuizBtn').style.display = 'block';
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('resultArea').style.display = 'none';
+    document.getElementById('contentArea').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== QUIZ LOGIC =====
+function startQuiz(day) {
+    currentDay = day;
+    const words = wordData[day];
+    let questions = [];
+    
+    words.forEach(word => {
+        let type = Math.floor(Math.random() * 3);
+        if (type === 0) {
+            questions.push({
+                question: `What does "${word.chinese}" mean?`,
+                options: shuffleArray([
+                    { text: word.meaning, correct: true },
+                    { text: getRandomMeaning(), correct: false },
+                    { text: getRandomMeaning(), correct: false },
+                    { text: getRandomMeaning(), correct: false }
+                ])
+            });
+        } else if (type === 1) {
+            questions.push({
+                question: `How do you write "${word.meaning}" in Chinese?`,
+                options: shuffleArray([
+                    { text: word.chinese, correct: true },
+                    { text: getRandomChinese(), correct: false },
+                    { text: getRandomChinese(), correct: false },
+                    { text: getRandomChinese(), correct: false }
+                ])
+            });
+        } else {
+            let pinyinOptions = [word.pinyin];
+            while(pinyinOptions.length < 4) {
+                let randPinyin = getRandomPinyin();
+                if(!pinyinOptions.includes(randPinyin)) pinyinOptions.push(randPinyin);
+            }
+            questions.push({
+                question: `What is the pinyin for "${word.chinese}"?`,
+                options: shuffleArray(pinyinOptions.map(p => ({ text: p, correct: p === word.pinyin })))
+            });
+        }
+    });
+    
+    questions = questions.slice(0, 10);
+    currentQuestions = questions;
+    currentQuestionIndex = 0;
+    score = 0;
+    
+    document.getElementById('quizArea').style.display = 'block';
+    document.getElementById('resultArea').style.display = 'none';
+    renderQuestion();
+}
+
+function getRandomMeaning() {
+    const keys = Object.keys(wordData);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    const randomWord = wordData[randomKey][Math.floor(Math.random() * wordData[randomKey].length)];
+    return randomWord.meaning;
+}
+
+function getRandomChinese() {
+    const keys = Object.keys(wordData);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    const randomWord = wordData[randomKey][Math.floor(Math.random() * wordData[randomKey].length)];
+    return randomWord.chinese;
+}
+
+function getRandomPinyin() {
+    const keys = Object.keys(wordData);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    const randomWord = wordData[randomKey][Math.floor(Math.random() * wordData[randomKey].length)];
+    return randomWord.pinyin;
+}
+
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function renderQuestion() {
+    if (currentQuestionIndex >= currentQuestions.length) {
+        showResult();
+        return;
+    }
+    
+    const q = currentQuestions[currentQuestionIndex];
+    document.getElementById('questionText').textContent = q.question;
+    
+    const optionsDiv = document.getElementById('options');
+    optionsDiv.innerHTML = '';
+    
+    q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt.text;
+        btn.onclick = () => selectOption(idx);
+        optionsDiv.appendChild(btn);
+    });
+    
+    document.getElementById('progressBar').style.width = ((currentQuestionIndex) / currentQuestions.length * 100) + '%';
+    document.getElementById('progressText').textContent = `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
+}
+
+function selectOption(index) {
+    const q = currentQuestions[currentQuestionIndex];
+    const btns = document.querySelectorAll('.option-btn');
+    
+    btns.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (q.options[idx].correct) {
+            btn.style.background = '#4caf50';
+            btn.style.color = 'white';
+        } else if (idx === index && !q.options[idx].correct) {
+            btn.style.background = '#f44336';
+            btn.style.color = 'white';
+        }
+    });
+    
+    if (q.options[index].correct) score++;
+    
+    setTimeout(() => {
+        currentQuestionIndex++;
+        renderQuestion();
+    }, 800);
+}
+
+function showResult() {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('resultArea').style.display = 'block';
+    
+    const percentage = Math.round((score / currentQuestions.length) * 100);
+    document.getElementById('scoreDisplay').textContent = `${score}/${currentQuestions.length}`;
+    document.getElementById('percentageDisplay').textContent = `${percentage}%`;
+    
+    let rewardHtml = '';
+    let passed = false;
+    
+    if (score >= 10) {
+        passed = true;
+        rewardHtml = `
+            <div class="reward-display perfect">
+                <div class="reward-icon">🏆🔥</div>
+                <div class="reward-text">PERFECT SCORE! You're incredible baby! 🤯</div>
+                <p style="color:#c2185b;font-weight:600;margin-top:10px;">Call me RIGHT NOW for your special reward 🎬😏</p>
+            </div>
+        `;
+    } else if (score >= 9) {
+        passed = true;
+        rewardHtml = `
+            <div class="reward-display great">
+                <div class="reward-icon">🌟</div>
+                <div class="reward-text">Good boy! Almost perfect! 😘</div>
+                <p style="color:#c2185b;font-weight:600;margin-top:10px;">Message me to claim what you earned 📸💕</p>
+            </div>
+        `;
+    } else if (score >= 8) {
+        passed = true;
+        rewardHtml = `
+            <div class="reward-display good">
+                <div class="reward-icon">🎁</div>
+                <div class="reward-text">Not bad baby! You passed 😏</div>
+                <p style="color:#c2185b;font-weight:600;margin-top:10px;">Text me for your prize 💋</p>
+            </div>
+        `;
+    } else {
+        rewardHtml = `
+            <div class="reward-display fail">
+                <div class="reward-icon">😤</div>
+                <div class="reward-text">Only ${score}/10? Try again baby!</div>
+                <p style="color:#888;margin-top:10px;">You gotta earn that surprise... study harder! 📖💪</p>
+            </div>
+        `;
+    }
+    
+    document.getElementById('rewardContent').innerHTML = rewardHtml;
+    
+    if (passed && currentDay > 10) {
+        unlockDay(currentDay);
+    }
+}
+
+// ===== PROGRESS SAVING =====
+function saveProgress() {
+    try {
+        localStorage.setItem('nathanChineseProgress', JSON.stringify(unlockedDays));
+    } catch(e) {
+        console.log('Save failed:', e);
+    }
+}
+
+function loadProgress() {
+    try {
+        const saved = localStorage.getItem('nathanChineseProgress');
+        if (saved) {
+            unlockedDays = JSON.parse(saved);
+            if (!unlockedDays.includes(1)) unlockedDays.push(1);
+        }
+    } catch(e) {
+        console.log('Load failed:', e);
+    }
+}
+
+function unlockDay(day) {
+    if (!unlockedDays.includes(day)) {
+        unlockedDays.push(day);
+        saveProgress();
+        updateCalendar();
+    }
+}
+</script>
+
+</body>
+</html>

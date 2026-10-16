@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 For My Love 💕</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 50%, #f48fb1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 560px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(233,30,99,0.2);
+            border: 2px solid rgba(255,182,193,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .greeting {
+            text-align: center;
+            font-size: 23px;
+            font-weight: 700;
+            color: #880e4f;
+            margin-bottom: 4px;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 40px;
+            color: #c2185b;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #ad1457;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 300;
+        }
+
+        .warning-badge {
+            text-align: center;
+            background: #c62828;
+            color: white;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 6px 16px;
+            border-radius: 30px;
+            display: inline-block;
+            margin: 0 auto 20px;
+            letter-spacing: 1px;
+            animation: pulseWarning 1.5s infinite;
+        }
+        .warning-wrapper { text-align: center; }
+
+        @keyframes pulseWarning {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        .question-card {
+            background: #fff5f7;
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 18px;
+            border-left: 4px solid #ec407a;
+        }
+        .question-card.correct { border-left-color:#66bb6a; background:#f1f8e9; }
+        .question-card.wrong { border-left-color:#ef5350; background:#ffebee; animation: shake 0.4s ease; }
+
+        @keyframes shake {
+            0%,100%{transform:translateX(0);}
+            20%{transform:translateX(-8px);}
+            40%{transform:translateX(8px);}
+            60%{transform:translateX(-5px);}
+            80%{transform:translateX(5px);}
+        }
+
+        .question-number {
+            font-size: 11px;
+            font-weight: 600;
+            color: #ec407a;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .question-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .timer-badge {
+            display:inline-block;
+            background:#c2185b;
+            color:white;
+            font-size:13px;
+            font-weight:600;
+            padding:3px 12px;
+            border-radius:20px;
+            margin-bottom:10px;
+        }
+        .timer-countdown {
+            font-size:36px;
+            font-weight:700;
+            color:#c62828;
+            text-align:center;
+            margin:8px 0;
+        }
+
+        .input-group { display:flex; gap:10px; align-items:center; }
+        input[type="text"] {
+            flex:1;
+            padding:10px 14px;
+            border:2px solid #f8bbd0;
+            border-radius:12px;
+            font-size:15px;
+            outline:none;
+            font-family:'Poppins',sans-serif;
+        }
+        input[type="text"]:focus { border-color:#ec407a; }
+
+        .btn-small {
+            background:#ec407a;
+            color:white;
+            border:none;
+            padding:10px 18px;
+            border-radius:12px;
+            font-size:14px;
+            font-weight:600;
+            cursor:pointer;
+            font-family:'Poppins',sans-serif;
+        }
+        .btn-small:hover { background:#c2185b; transform:scale(1.03); }
+        .btn-small:disabled { background:#ccc; cursor:not-allowed; transform:none; }
+
+        .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+        .option-btn {
+            padding:10px;
+            border:2px solid #f8bbd0;
+            border-radius:12px;
+            background:white;
+            font-size:14px;
+            font-weight:500;
+            cursor:pointer;
+            font-family:'Poppins',sans-serif;
+            text-align:center;
+        }
+        .option-btn:hover { background:#fce4ec; border-color:#ec407a; }
+        .option-btn.selected { background:#ec407a; color:white; border-color:#ec407a; }
+
+        .feedback { margin-top:8px; font-size:13px; font-weight:500; display:none; }
+        .feedback.show { display:block; }
+        .feedback.success { color:#2e7d32; }
+        .feedback.error { color:#c62828; }
+
+        .progress-bar { height:6px; background:#f8bbd0; border-radius:10px; margin:20px 0; overflow:hidden; }
+        .progress-fill { height:100%; width:0%; background:linear-gradient(90deg,#ec407a,#c2185b); transition:width 0.5s ease; }
+
+        .status-message { text-align:center; font-size:14px; color:#666; margin-top:12px; }
+        .hidden { display:none !important; }
+
+        .password-reveal {
+            text-align:center;
+            padding:30px 20px;
+            background:linear-gradient(135deg,#fce4ec,#f8bbd0);
+            border-radius:20px;
+            margin-top:10px;
+        }
+        .password-reveal h2 {
+            font-family:'Dancing Script',cursive;
+            font-size:52px;
+            color:#c62828;
+            margin-bottom:4px;
+            animation: heartbeat 1.5s infinite;
+        }
+        @keyframes heartbeat {
+            0%,100%{transform:scale(1);}
+            50%{transform:scale(1.05);}
+        }
+        .love-line { font-size:21px; font-weight:600; color:#880e4f; margin:6px 0; }
+        .big-password {
+            font-size:40px;
+            font-weight:800;
+            color:#880e4f;
+            letter-spacing:8px;
+            background:white;
+            display:inline-block;
+            padding:12px 40px;
+            border-radius:16px;
+            margin:12px 0;
+            border:2px solid #f8bbd0;
+        }
+        .good-luck { font-size:19px; font-weight:700; color:#c2185b; margin-top:8px; }
+        .believe { font-size:19px; font-weight:600; color:#6a1b9a; margin-top:4px; }
+
+        .hearts { position:fixed; inset:0; pointer-events:none; z-index:-1; overflow:hidden; }
+        .heart { position:absolute; font-size:20px; opacity:0.12; animation:floatHeart 15s infinite linear; }
+        @keyframes floatHeart {
+            0%{transform:translateY(100vh) rotate(0deg);opacity:0;}
+            10%{opacity:0.12;}
+            90%{opacity:0.12;}
+            100%{transform:translateY(-10vh) rotate(720deg);opacity:0;}
+        }
+
+        .heart-explosion { position:fixed; inset:0; pointer-events:none; z-index:9998; }
+        .exploding-heart { position:absolute; font-size:40px; animation:explodeHeart 2s ease-out forwards; }
+        @keyframes explodeHeart {
+            0%{transform:scale(0) rotate(0deg);opacity:1;}
+            50%{transform:scale(1.5) rotate(180deg);opacity:0.9;}
+            100%{transform:scale(0) rotate(360deg) translateY(-200px);opacity:0;}
+        }
+    </style>
+</head>
+<body>
+
+<div class="hearts" id="heartsContainer"></div>
+
+<div class="container">
+    <div class="greeting">WHAT'SUP OBBO NATE</div>
+    <h1>💕 For My Love 💕</h1>
+    <p class="subtitle">Answer all 5 questions correctly to unlock your surprise</p>
+
+    <div class="warning-wrapper">
+        <div class="warning-badge">⚠️ YOU BETTER ANSWER THIS ⚠️</div>
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div id="questionsContainer"></div>
+    <div class="status-message" id="statusMessage"></div>
+
+    <div id="passwordReveal" class="password-reveal hidden">
+        <h2>I LOVE YOU MY BABY ❤️❤️❤️</h2>
+        <div class="love-line">You really know me 🥹</div>
+        <p style="margin:10px 0 4px;">Here is your Password</p>
+        <div class="big-password">3005RN</div>
+        <div class="good-luck">GOOD LUCK !</div>
+        <div class="believe">I BELIEVE IN YOU 😊</div>
+        <p style="margin-top:14px;">Use this password to enter your special website.</p>
+        <button class="btn-small" style="margin-top:15px;padding:12px 40px;font-size:16px;" onclick="goToMainSite()">Enter the Website →</button>
+    </div>
+</div>
+
+<script>
+    // floating hearts
+    const heartEmojis = ['❤️','💕','💗','💖','🌸','✨'];
+    const heartsBox = document.getElementById('heartsContainer');
+    for (let i=0;i<25;i++){
+        const h=document.createElement('div');
+        h.className='heart';
+        h.textContent=heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+        h.style.left=Math.random()*100+'%';
+        h.style.fontSize=(15+Math.random()*25)+'px';
+        h.style.animationDuration=(12+Math.random()*18)+'s';
+        h.style.animationDelay=(Math.random()*20)+'s';
+        heartsBox.appendChild(h);
+    }
+
+    function explodeHearts(){
+        const box=document.createElement('div');
+        box.className='heart-explosion';
+        document.body.appendChild(box);
+        const emojis=['❤️','💕','💗','💖','♥️','💋'];
+        for(let i=0;i<35;i++){
+            const h=document.createElement('div');
+            h.className='exploding-heart';
+            h.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+            h.style.left=(10+Math.random()*78)+'%';
+            h.style.top=(10+Math.random()*68)+'%';
+            h.style.fontSize=(25+Math.random()*50)+'px';
+            h.style.animationDuration=(1.5+Math.random()*1.5)+'s';
+            h.style.animationDelay=(Math.random()*0.8)+'s';
+            box.appendChild(h);
+        }
+        setTimeout(()=>box.remove(),3800);
+    }
+
+    const questions = [
+        {
+            id:1,
+            text:"What's my favorite memory of us?",
+            type:'text',
+            answer:'playing in the rain'
+        },
+        {
+            id:2,
+            text:"What do I like the most from Kiss, Hug, Cuddle and Makeout?",
+            type:'text',
+            answer:'hug'
+        },
+        {
+            id:3,
+            text:"What is my birthday date?",
+            type:'text',
+            answer:'19/12/2004',
+            timer:20
+        },
+        {
+            id:4,
+            text:"What date is our anniversary?",
+            type:'choice',
+            options:['A. 30/05/2025','B. 12/06/2025','C. 15/09/2025','D. I don’t know'],
+            correctIndex:0
+        },
+        {
+            id:5,
+            text:"What part of your body do I like the most?",
+            type:'choice',
+            options:['A. Eyes','B. Arms','C. Back','D. Teeth'],
+            correctIndex:0
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let timerInterval = null;
+    let timerSeconds = 0;
+
+    function normalize(s){ return s.trim().toLowerCase().replace(/\s+/g,' '); }
+
+    function renderQuestion(index){
+        const q = questions[index];
+        const isTimed = q.timer !== undefined;
+        let html = `<div class="question-card" id="qCard${index}">`;
+        html += `<div class="question-number">Question ${index+1} of ${questions.length}</div>`;
+        html += `<div class="question-text">${q.text}</div>`;
+
+        if(isTimed){
+            html += `<div class="timer-badge">⏱ TIMED — 20 SECONDS</div>`;
+            html += `<div class="timer-countdown" id="timerDisplay">${q.timer}s</div>`;
+        }
+
+        if(q.type==='text'){
+            html += `<div class="input-group">
+                <input type="text" id="input${index}" placeholder="Type your answer..." autocomplete="off">
+                <button class="btn-small" id="submitBtn${index}" onclick="checkTextAnswer(${index})">Submit</button>
+            </div>`;
+        } else {
+            html += `<div class="options-grid">`;
+            q.options.forEach((opt,oi)=>{
+                html += `<button class="option-btn" id="opt${index}_${oi}" onclick="selectOption(${index},${oi})">${opt}</button>`;
+            });
+            html += `</div>`;
+        }
+
+        html += `<div class="feedback" id="feedback${index}"></div></div>`;
+        document.getElementById('questionsContainer').innerHTML = html;
+
+        if(isTimed) startTimer(index, q.timer);
+        updateProgress();
+    }
+
+    function startTimer(index, seconds){
+        timerSeconds = seconds;
+        const display = document.getElementById('timerDisplay');
+        if(timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(()=>{
+            timerSeconds--;
+            if(display) display.textContent = timerSeconds+'s';
+            if(timerSeconds<=5 && display) display.style.color='#d32f2f';
+            if(timerSeconds<=0){
+                clearInterval(timerInterval);
+                const fb=document.getElementById(`feedback${index}`);
+                if(fb){
+                    fb.textContent="⏰ Time's up! Try again from the beginning.";
+                    fb.className='feedback show error';
+                }
+                setTimeout(resetAll,1600);
+            }
+        },1000);
+    }
+
+    function stopTimer(){ if(timerInterval){ clearInterval(timerInterval); timerInterval=null; } }
+
+    function checkTextAnswer(index){
+        const q=questions[index];
+        const input=document.getElementById(`input${index}`);
+        const fb=document.getElementById(`feedback${index}`);
+        const card=document.getElementById(`qCard${index}`);
+        if(normalize(input.value)===normalize(q.answer)){
+            stopTimer();
+            fb.textContent='✅ Correct! Well done, baby!';
+            fb.className='feedback show success';
+            card.classList.add('correct');
+            input.disabled=true;
+            document.getElementById(`submitBtn${index}`).disabled=true;
+            setTimeout(goToNextQuestion,1200);
+        } else {
+            fb.textContent='❌ Wrong answer. Try again!';
+            fb.className='feedback show error';
+            card.classList.add('wrong');
+            setTimeout(()=>card.classList.remove('wrong'),550);
+        }
+    }
+
+    function selectOption(index, oi){
+        const q=questions[index];
+        const fb=document.getElementById(`feedback${index}`);
+        const card=document.getElementById(`qCard${index}`);
+        q.options.forEach((_,i)=>document.getElementById(`opt${index}_${i}`).classList.remove('selected'));
+        document.getElementById(`opt${index}_${oi}`).classList.add('selected');
+
+        if(oi===q.correctIndex){
+            fb.textContent='✅ Correct! You know me so well 💕';
+            fb.className='feedback show success';
+            card.classList.add('correct');
+            q.options.forEach((_,i)=>document.getElementById(`opt${index}_${i}`).disabled=true);
+            setTimeout(goToNextQuestion,1300);
+        } else {
+            fb.textContent='❌ Not quite, baby. Try again!';
+            fb.className='feedback show error';
+            card.classList.add('wrong');
+            setTimeout(()=>{
+                card.classList.remove('wrong');
+                document.getElementById(`opt${index}_${oi}`).classList.remove('selected');
+            },600);
+        }
+    }
+
+    function goToNextQuestion(){
+        if(currentQuestionIndex < questions.length-1){
+            currentQuestionIndex++;
+            renderQuestion(currentQuestionIndex);
+        } else {
+            showPassword();
+        }
+    }
+
+    function showPassword(){
+        document.getElementById('questionsContainer').innerHTML='';
+        document.getElementById('passwordReveal').classList.remove('hidden');
+        document.getElementById('statusMessage').textContent='🎉 All correct! You really know me.';
+        updateProgress();
+        explodeHearts();
+    }
+
+    function resetAll(){
+        currentQuestionIndex=0;
+        stopTimer();
+        document.getElementById('passwordReveal').classList.add('hidden');
+        document.getElementById('statusMessage').textContent='';
+        renderQuestion(0);
+    }
+
+    function updateProgress(){
+        const fill=document.getElementById('progressFill');
+        let completed=currentQuestionIndex;
+        if(!document.getElementById('passwordReveal').classList.contains('hidden')) completed=questions.length;
+        fill.style.width=(completed/questions.length)*100+'%';
+    }
+
+    function goToMainSite(){ window.location.href='main.html'; }
+
+    document.addEventListener('keydown',e=>{
+        if(e.key==='Enter'){
+            const input=document.querySelector('input[type="text"]:not([disabled])');
+            if(input){
+                const idx=parseInt(input.id.replace('input',''));
+                if(!isNaN(idx)) checkTextAnswer(idx);
+            }
+        }
+    });
+
+    renderQuestion(0);
+</script>
+
+</body>
+</html>
